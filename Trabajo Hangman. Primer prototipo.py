@@ -1,24 +1,24 @@
 from es_ES import words
 from random import choice
 from es_ES import reglas
-#%% Entrada para modo 
+#%% Entrada humano
 def entrada (palabra_secreta, diccionario):
     ingreso_valido = False
     while not ingreso_valido:
         ingreso = input('Ingrese su suposicion:\n')
         if ingreso.isalpha():
             ingreso = ingreso.lower()
-            ingreso_valido = palabra_valida(palabra_secreta, diccionario)
+            ingreso_valido = palabra_valida(ingreso, diccionario)
             if not ingreso_valido:
                 print ('palabra no conocida')
         else:
             print('Ingrese solo letras o palabras')
     return ingreso
-#%%
+#%% Palabra Random
 def palabra_a_adivinar(diccionario):
     palabra = choice(diccionario)
     return palabra
-#%%
+#%% Validar Palabra
 def palabra_valida(palabra, diccionario):
     inicio = 0
     fin = len(diccionario)
@@ -31,7 +31,7 @@ def palabra_valida(palabra, diccionario):
         if diccionario[medio] < palabra:
             inicio = medio +1
     return False
-#%%
+#%% Chequeo Humano
 def chequeo(palabra_secreta, ingreso, oportunidades, ganador, comodin, usadas):
     lista_palabra = list(palabra_secreta)
     if len(ingreso) > 1:
@@ -48,14 +48,14 @@ def chequeo(palabra_secreta, ingreso, oportunidades, ganador, comodin, usadas):
                 if lista_palabra[i] == ingreso:
                     comodin[i] = ingreso
     return oportunidades, comodin, usadas
-#%%
+#%% Display
 def display(oportunidades : int, comodin, usadas)->None:
     comodin_pantalla = ''
     for letra in range(len(comodin)):
         comodin_pantalla += comodin[letra] + ' '
     print ('\n',comodin_pantalla,'(' + usadas + ')', '\nOportunidades restantes', oportunidades)
     
-#%%
+#%% Fin Juego
 def fin_juego(palabra_secreta:str, oportunidades:int, comodin, jugando):
     if comodin == list(palabra_secreta):
         print (f'Felicitaciones, has ganado el juego. La palabra era {palabra_secreta}')
@@ -64,7 +64,7 @@ def fin_juego(palabra_secreta:str, oportunidades:int, comodin, jugando):
         print (f'Mala suerte, te has quedado sin oportunidades. La palabra era {palabra_secreta}')
         jugando = False
     return jugando
-#%%
+#%% Elegir Palabra
 def elegir_palabra(diccionario):
     repetir= True
     while repetir:
@@ -75,7 +75,7 @@ def elegir_palabra(diccionario):
         else:
            print("Esta palabra no está incluida. Por favor ingrese otra palabra. ")
     return palabra_secreta
-#%%
+#%% Si o no
 def siono(letra, palabra_secreta, oportunidades,comodin_actualizado):
     confirmacion= True
     while confirmacion:
@@ -93,14 +93,14 @@ def siono(letra, palabra_secreta, oportunidades,comodin_actualizado):
         elif confirmar == "si" and letra in palabra_secreta:
             acierto=True
     return oportunidades, acierto
-#%%
+#%% Filtro * Largo
 def filtro_largo(diccionario : list, palabra_secreta : str)-> list:
     diccionario_filtrado = []
     for posible_palabra in diccionario:
         if len(posible_palabra) == len(palabra_secreta):
             diccionario_filtrado.append(posible_palabra)
     return diccionario_filtrado
-#%%
+#%% Letra + Comun
 def letra_mas_comun(diccionario_filtrado : list, abc : list, usadas)-> list:
     coincidencias = []
     for numero in range(len(abc)):
@@ -114,13 +114,13 @@ def letra_mas_comun(diccionario_filtrado : list, abc : list, usadas)-> list:
     usadas += letra_posible
     abc.pop(abc.index(letra_posible))
     return letra_posible, abc, usadas
-#%%
+#%% Actualizar Comodin
 def actualizar_comodin (palabra_secreta : str, letra_correcta : str, comodin : list) ->list:
     for indice_caracter in range(len(palabra_secreta)):
         if palabra_secreta[indice_caracter] == letra_correcta:
             comodin[indice_caracter] = letra_correcta
     return comodin
-#%%
+#%% Filtro del Comodin
 def filtro(palabra : str, comodin_actualizado : str)->bool:
     for letra in range(len(palabra)):
         if comodin_actualizado[letra] == '_':
@@ -128,7 +128,7 @@ def filtro(palabra : str, comodin_actualizado : str)->bool:
         elif comodin_actualizado[letra] != palabra[letra]:
             return False
     return True
-#%%
+#%% Filtro * Comodin
 def filtro_comodin(diccionario_filtrado : list, comodin_actualizado : list)->list:
     diccionario_a_actualizar = []
     for palabra in diccionario_filtrado:
@@ -136,7 +136,7 @@ def filtro_comodin(diccionario_filtrado : list, comodin_actualizado : list)->lis
         if aprueba:
             diccionario_a_actualizar.append(palabra)
     return diccionario_a_actualizar
-#%%
+#%% FIltro no Coincidencias
 def filtro_no_coincidencia(letra_posible, diccionario_filtrado):
     diccionario_actualizado = []
     for palabra in range(len(diccionario_filtrado)):
